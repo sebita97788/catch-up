@@ -1,0 +1,19 @@
+@startuml "Components-Bounded Contexts"
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title CatchUp - Component Diagram (Bounded Contexts)
+
+Container(web, "Web Application", "Nginx", "Serves the compiled Single Page Application to the user's browser")
+System_Ext(newsapi, "NewsAPI.org", "Provides news sources and their top headlines")
+System_Ext(logodev, "Logo.dev", "Resolves a source's logo from its website domain")
+
+Container_Boundary(spa, "Single Page Application") {
+    Component(news, "News", "Vue", "Browses sources and reads their top headlines")
+    Component(shared, "Shared", "Vue", "Url, DateTime, and StringValidator value objects, the logo gateway, the HTTP error interceptor, and cross-cutting presentation: Layout, LanguageSwitcher, FooterContent")
+}
+
+Rel(web, news, "Serves")
+Rel(news, shared, "Uses")
+Rel(news, newsapi, "Fetches sources and articles from [HTTPS]")
+Rel(shared, logodev, "Fetches source logos from [HTTPS]")
+@enduml

@@ -1,0 +1,20 @@
+@startuml "Containers"
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title CatchUp - Container Diagram
+
+Person(user, "User", "A person who browses news sources and reads their articles")
+System_Ext(newsapi, "NewsAPI.org", "Provides news sources and their top headlines")
+System_Ext(logodev, "Logo.dev", "Resolves a source's logo from its website domain")
+
+System_Boundary(catchup, "CatchUp") {
+    Container(web, "Web Application", "Nginx", "Serves the compiled Single Page Application to the user's browser")
+    Container(spa, "Single Page Application", "Vue, PrimeVue", "Lets the user browse sources, read articles, switch languages, and share articles, all in the browser")
+}
+
+Rel(user, web, "Visits catch-up using [HTTPS]")
+Rel(web, spa, "Delivers to the user's web browser")
+Rel(user, spa, "Interacts with")
+Rel(spa, newsapi, "Fetches sources and articles from [HTTPS]")
+Rel(spa, logodev, "Fetches source logos from [HTTPS]")
+@enduml

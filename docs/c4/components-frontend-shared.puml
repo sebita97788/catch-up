@@ -1,0 +1,17 @@
+@startuml "Components-Shared"
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title CatchUp - Shared Component Diagram
+
+Container(web, "Web Application", "Nginx", "Serves the compiled Single Page Application to the user's browser")
+System_Ext(logodev, "Logo.dev", "Resolves a source's logo from its website domain")
+
+Container_Boundary(shared, "Shared") {
+    Component(presentation, "Presentation", "Vue Components", "Layout, LanguageSwitcher, FooterContent")
+    Component(domain, "Domain", "Url, DateTime, StringValidator", "Value objects any context can use")
+    Component(infrastructure, "Infrastructure", "LogoDevApi, errorInterceptor", "Builds a source's logo URL from its website domain, and normalizes HTTP errors")
+}
+
+Rel(web, presentation, "Serves")
+Rel(infrastructure, logodev, "Fetches source logos from [HTTPS]")
+@enduml

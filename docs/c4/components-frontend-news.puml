@@ -1,0 +1,22 @@
+@startuml "Components-News"
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title CatchUp - News Component Diagram
+
+Container(web, "Web Application", "Nginx", "Serves the compiled Single Page Application to the user's browser")
+System_Ext(newsapi, "NewsAPI.org", "Provides news sources and their top headlines")
+
+Container_Boundary(news, "News Bounded Context") {
+    Component(presentation, "Presentation", "Vue Components", "ArticleItem, ArticleList, SourceItem, SourceList, SourceSummary, UnavailableContent")
+    Component(application, "Application", "newsStore", "Holds source and article state as a Vue reactive store")
+    Component(domain, "Domain", "Article, Source", "Entities that own the News bounded context's invariants")
+    Component(infrastructure, "Infrastructure", "NewsApi, ArticleAssembler, SourceAssembler", "Maps provider responses into domain entities")
+}
+
+Rel(web, presentation, "Serves")
+Rel(presentation, application, "Reads from")
+Rel(application, infrastructure, "Reads through")
+Rel(application, domain, "Reads")
+Rel(infrastructure, domain, "Builds")
+Rel(infrastructure, newsapi, "Fetches sources and articles from [HTTPS]")
+@enduml

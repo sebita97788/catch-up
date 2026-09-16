@@ -1,0 +1,14 @@
+@startuml "Context"
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title CatchUp - Context Diagram
+
+Person(user, "User", "A person who browses news sources and reads their articles")
+System(catchup, "CatchUp", "Lets a user browse news sources, read their top headlines, switch languages, and share articles")
+System_Ext(newsapi, "NewsAPI.org", "Provides news sources and their top headlines")
+System_Ext(logodev, "Logo.dev", "Resolves a source's logo from its website domain")
+
+Rel(user, catchup, "Browses sources and reads articles using [HTTPS]")
+Rel(catchup, newsapi, "Fetches sources and articles from [HTTPS]")
+Rel(catchup, logodev, "Fetches source logos from [HTTPS]")
+@enduml
