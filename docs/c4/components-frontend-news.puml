@@ -1,22 +1,38 @@
-@startuml "Components-News"
+@startuml "Components-Layers"
 !includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
-title CatchUp - News Component Diagram
+title CatchUp - News Component Diagram (DDD Layers)
 
-Container(web, "Web Application", "Nginx", "Serves the compiled Single Page Application to the user's browser")
 System_Ext(newsapi, "NewsAPI.org", "Provides news sources and their top headlines")
 
 Container_Boundary(news, "News Bounded Context") {
-    Component(presentation, "Presentation", "Vue Components", "ArticleItem, ArticleList, SourceItem, SourceList, SourceSummary, UnavailableContent")
-    Component(application, "Application", "newsStore", "Holds source and article state as a Vue reactive store")
-    Component(domain, "Domain", "Article, Source", "Entities that own the News bounded context's invariants")
-    Component(infrastructure, "Infrastructure", "NewsApi, ArticleAssembler, SourceAssembler", "Maps provider responses into domain entities")
+    Boundary(presentation, "Presentation") {
+        Component(source_list, "source-list", "Vue Component", "source-list.vue: lists the sources in a drawer and relays which one was chosen")
+        Component(source_item, "source-item", "Vue Component", "source-item.vue: one source, chosen with a click")
+        Component(source_summary, "source-summary", "Vue Component", "source-summary.vue: one source in full, opened as a popover")
+        Component(article_list, "article-list", "Vue Component", "article-list.vue: lists the articles of the current source")
+        Component(article_item, "article-item", "Vue Component", "article-item.vue: one article, with read more, about the source, and share")
+        Component(unavailable_content, "unavailable-content", "Vue Component", "unavailable-content.vue: the fallback shown when there are no articles, with the errors behind it")
+    }
+    Boundary(application, "Application") {
+        Component(news_store, "newsStore", "Vue class with private state, entities in shallowRef", "newsStore, news.store.js: the sources, the articles cached by source, the errors, and the current source")
+    }
+    Boundary(domain, "Domain") {
+        Component(news_domain_model, "news/domain/model", "Entities", "Source (source.entity.js), Article (article.entity.js): what makes a source and an article valid")
+    }
+    Boundary(infrastructure, "Infrastructure") {
+        Component(news_infrastructure, "news/infrastructure", "HTTP, Assemblers, Resources", "NewsApi (news-api.js), SourceAssembler (source.assembler.js), ArticleAssembler (article.assembler.js), news-resources.js: fetches from the provider, the assemblers turn its resources into entities")
+    }
 }
 
-Rel(web, presentation, "Serves")
-Rel(presentation, application, "Reads from")
-Rel(application, infrastructure, "Reads through")
-Rel(application, domain, "Reads")
-Rel(infrastructure, domain, "Builds")
-Rel(infrastructure, newsapi, "Fetches sources and articles from [HTTPS]")
+Rel(source_list, source_item, "Renders one per source")
+Rel(article_list, article_item, "Renders one per article")
+Rel(article_item, source_summary, "Renders and toggles as a popover")
+Rel(source_item, news_domain_model, "Displays")
+Rel(source_summary, news_domain_model, "Displays")
+Rel(article_item, news_domain_model, "Displays")
+Rel(news_store, news_domain_model, "Holds")
+Rel(news_store, news_infrastructure, "Loads sources and articles through")
+Rel(news_infrastructure, news_domain_model, "Builds")
+Rel(news_infrastructure, newsapi, "Fetches sources and articles from [HTTPS]")
 @enduml

@@ -9,11 +9,12 @@ System_Ext(logodev, "Logo.dev", "Resolves a source's logo from its website domai
 
 Container_Boundary(spa, "Single Page Application") {
     Component(news, "News", "Vue", "Browses sources and reads their top headlines")
-    Component(shared, "Shared", "Vue", "Url, DateTime, and StringValidator value objects, the logo gateway, the HTTP error interceptor, and cross-cutting presentation: Layout, LanguageSwitcher, FooterContent")
+    Component(shared, "Shared", "Vue", "Url, DateTime, and StringValidator value objects, LogoDevApi, the HTTP error interceptor, and cross-cutting presentation: layout, language-switcher, footer-content")
 }
 
-Rel(web, news, "Serves")
-Rel(news, shared, "Uses")
+Rel(web, shared, "Serves")
+Rel(shared, news, "Renders source-list, article-list, and unavailable-content from, and reads newsStore from")
+Rel(news, shared, "Uses Url, DateTime, and StringValidator from, resolves each source's logo with LogoDevApi from, and normalizes HTTP errors with errorInterceptor from")
 Rel(news, newsapi, "Fetches sources and articles from [HTTPS]")
 Rel(shared, logodev, "Fetches source logos from [HTTPS]")
 @enduml
