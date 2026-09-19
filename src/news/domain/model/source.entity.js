@@ -1,4 +1,5 @@
 import {StringValidator} from "../../../shared/domain/model/string-validator.js";
+import {Url} from "../../../shared/domain/model/url.js";
 
 export class Source {
     #id;
@@ -23,5 +24,37 @@ export class Source {
         this.#country = country;
         this.#urlToLogo = urlToLogo;
         Object.freeze(this);
+    }
+
+    get id() {
+        return this.#id;
+    }
+
+    get name() {
+        return this.#name;
+    }
+
+    get description() {
+        return this.#description;
+    }
+
+    get url() {
+        return this.#url;
+    }
+
+    get category() {
+        return this.#category;
+    }
+
+    get language() {
+        return this.#language;
+    }
+
+    get country() {
+        return this.#country;
+    }
+
+    get urlToLogo() {
+        return this.#urlToLogo;
     }
 }
