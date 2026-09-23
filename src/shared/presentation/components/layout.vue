@@ -4,6 +4,7 @@ import {newsStore} from "../../../news/application/news.store.js";
 import SourceList from "../../../news/presentation/components/source-list.vue";
 import LanguageSwitcher from "./language-switcher.vue";
 import ArticleList from "../../../news/presentation/components/article-list.vue";
+import UnavailableContent from "../../../news/presentation/components/unavailable-content.vue";
 import FooterContent from "./footer-content.vue";
 import {ref, computed, onMounted} from "vue";
 
@@ -14,6 +15,7 @@ const toggleDrawer = () => {
 };
 
 const sources = computed(() => newsStore.sources);
+const errors = computed(() => newsStore.errors);
 const articles = computed(() => newsStore.currentSourceArticles);
 
 const setSource = source => {
@@ -44,7 +46,8 @@ onMounted(() => {
       </pv-menubar>
     </header>
     <main class="content-padding">
-      <article-list :articles="articles"/>
+      <article-list v-if="articles.length" :articles="articles"/>
+      <unavailable-content v-else :errors="errors"/>
     </main>
     <footer>
       <footer-content/>
