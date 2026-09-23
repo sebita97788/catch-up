@@ -1,12 +1,20 @@
 <script lang="js" setup>
 import {useI18n} from "vue-i18n";
 import {Article} from "../../domain/model/article.entity.js";
+import SourceSummary from "./source-summary.vue";
+import {ref} from "vue";
 
 const {t} = useI18n();
 
 const { article } = defineProps({article: {type: Article, required: true}});
 
 const emit = defineEmits(['article-shared']);
+
+const sourceSummary = ref();
+
+const toggleSourceSummary = event => {
+  sourceSummary.value.toggle(event);
+};
 
 const shareArticle = async () => {
   const shareData = {title: article.title, url: article.url.toString()};
@@ -42,7 +50,7 @@ const shareArticle = async () => {
     </template>
     <template #subtitle>
       <div class="flex flex-column gap-2">
-        <p class="flex align-content-start flex-wrap">
+        <p class="flex align-content-start flex-wrap cursor-pointer" @click="toggleSourceSummary">
           <span class="flex align-items-center justify-content-center mr-2">
             <pv-avatar :aria-label="article.source.name"
                        :image="article.source.urlToLogo"
@@ -59,6 +67,7 @@ const shareArticle = async () => {
           <span class="text-sm">{{ t('article.published-on') }} {{ article.getFormatedPublishedAt() }}</span>
         </p>
       </div>
+      <source-summary ref="sourceSummary" :source="article.source" />
     </template>
     <template #content>
       <p class="flex align-content-start flex-wrap mt-4">
