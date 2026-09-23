@@ -2,7 +2,9 @@
 
 import {newsStore} from "../../../news/application/news.store.js";
 import SourceList from "../../../news/presentation/components/source-list.vue";
+import LanguageSwitcher from "./language-switcher.vue";
 import ArticleList from "../../../news/presentation/components/article-list.vue";
+import FooterContent from "./footer-content.vue";
 import {ref, computed, onMounted} from "vue";
 
 const drawerVisible = ref(false);
@@ -36,11 +38,17 @@ onMounted(() => {
                        v-model:visible="drawerVisible"
                        @source-selected="setSource"/>
         </template>
+        <template #end>
+          <language-switcher/>
+        </template>
       </pv-menubar>
     </header>
     <main class="content-padding">
       <article-list :articles="articles"/>
     </main>
+    <footer>
+      <footer-content/>
+    </footer>
   </div>
 </template>
 
