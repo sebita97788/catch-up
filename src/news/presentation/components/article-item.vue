@@ -1,5 +1,8 @@
 <script lang="js" setup>
+import {useI18n} from "vue-i18n";
 import {Article} from "../../domain/model/article.entity.js";
+
+const {t} = useI18n();
 
 const { article } = defineProps({article: {type: Article, required: true}});
 
@@ -50,10 +53,10 @@ const shareArticle = async () => {
           </span>
         </p>
         <p v-if="article.author" class="flex align-content-start flex-wrap">
-          <span class="text-sm">By {{ article.author }}</span>
+          <span class="text-sm">{{ t('article.by') }} {{ article.author }}</span>
         </p>
         <p class="flex align-content-start flex-wrap">
-          <span class="text-sm">Published on {{ article.getFormatedPublishedAt() }}</span>
+          <span class="text-sm">{{ t('article.published-on') }} {{ article.getFormatedPublishedAt() }}</span>
         </p>
       </div>
     </template>
@@ -65,10 +68,11 @@ const shareArticle = async () => {
     <template #footer>
       <div class="flex justify-content-between align-items-center">
         <pv-button v-if="!article.url.isEmpty()" as="a" :href="article.url.toString()" target="_blank"
-                   label="Read more" link class="p-0" />
+                   :label="t('read-more')" link class="p-0" />
         <pv-button
             v-if="!article.url.isEmpty()"
-            label="Share"
+            v-tooltip="t('article.copy-to-clipboard')"
+            :label="t('article.share')"
             aria-label="Share article"
             text
             size="small"
