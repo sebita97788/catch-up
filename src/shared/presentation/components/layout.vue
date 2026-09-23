@@ -1,6 +1,8 @@
 <script lang="js" setup>
+
 import {newsStore} from "../../../news/application/news.store.js";
 import SourceList from "../../../news/presentation/components/source-list.vue";
+import ArticleList from "../../../news/presentation/components/article-list.vue";
 import {ref, computed, onMounted} from "vue";
 
 const drawerVisible = ref(false);
@@ -10,6 +12,7 @@ const toggleDrawer = () => {
 };
 
 const sources = computed(() => newsStore.sources);
+const articles = computed(() => newsStore.currentSourceArticles);
 
 const setSource = source => {
   newsStore.setCurrentSource(source);
@@ -19,6 +22,7 @@ const setSource = source => {
 onMounted(() => {
   newsStore.loadSources();
 });
+
 </script>
 
 <template>
@@ -34,6 +38,9 @@ onMounted(() => {
         </template>
       </pv-menubar>
     </header>
+    <main class="content-padding">
+      <article-list :articles="articles"/>
+    </main>
   </div>
 </template>
 
@@ -48,5 +55,16 @@ onMounted(() => {
   position: sticky;
   top: 0;
   z-index: 1000;
+}
+
+.content-padding {
+  padding: 1rem;
+  flex: 1;
+}
+
+@media screen and (min-width: 768px) {
+  .content-padding {
+    padding: 2rem;
+  }
 }
 </style>
