@@ -1,5 +1,6 @@
 import {Source} from "./source.entity.js";
 import {StringValidator} from "../../../shared/domain/model/string-validator.js";
+import {DateTime} from "../../../shared/domain/model/date-time.js";
 import {Url} from "../../../shared/domain/model/url.js";
 
 const NO_IMAGE_URL = 'https://placehold.co/600x400?text=No+Image';
@@ -36,5 +37,37 @@ export class Article {
         this.#urlToImage = resolvedImage.isEmpty() ? new Url(NO_IMAGE_URL) : resolvedImage;
         this.#source = source;
         this.#publishedAt = dateTime;
+    }
+
+    get author() {
+        return this.#author;
+    }
+
+    get title() {
+        return this.#title;
+    }
+
+    get description() {
+        return this.#description;
+    }
+
+    get url() {
+        return this.#url;
+    }
+
+    get urlToImage() {
+        return this.#urlToImage;
+    }
+
+    get source() {
+        return this.#source;
+    }
+
+    get publishedAt() {
+        return this.#publishedAt;
+    }
+
+    getFormatedPublishedAt() {
+        return this.#publishedAt.format();
     }
 }
